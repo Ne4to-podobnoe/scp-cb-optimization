@@ -15,6 +15,7 @@ Function UpdateEvents()
 	UpdateRooms()
 	
 	For e.Events = Each Events
+		; Case EVENT CONST (if you want to add new event)
 		Select e\EventConst
 			Case e_exit1
 				;[Block]

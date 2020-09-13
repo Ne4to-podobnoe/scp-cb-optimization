@@ -2441,7 +2441,8 @@ Type Events
 	
 	Field img%
 	Field EventConst
-End Type 
+End Type
+; Const e_EVENTNAME = ID (if you want to add new event)
 Const e_173 = 0
 Const e_alarm = 1
 Const e_pocketdimension = 2
@@ -2569,6 +2570,9 @@ Function CreateEvent.Events(eventname$, roomname$, id%, prob# = 0.0)
 	Return Null
 End Function
 Function FindEventConst(eventname$)
+	;-example
+	;Case "EVENTNAME": Return EVENT CONST (example e_173)
+	;-
 	Select eventname
 		Case "173" Return 0
 		Case "alarm" Return 1
@@ -2833,9 +2837,6 @@ Function InitEvents()
 	CreateEvent("room2pit106", "room2pit", 0, 0.07 + (0.1*SelectedDifficulty\aggressiveNPCs))
 	
 	CreateEvent("room1archive", "room1archive", 0, 1.0)
-	For e.Events = Each Events
-		if e\EventConst = 0 Then DebugLog "Found zero at "+e\EventName
-	Next
 End Function
 
 Include "sourcecode\UpdateEvents.bb"
@@ -2960,7 +2961,7 @@ Global I_Zone.MapZones = New MapZones
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
 Global mswait
 Repeat
-	mstick = MilliSecs()
+	;mstick = MilliSecs()
 	Cls
 	
 	CurTime = MilliSecs2()
@@ -3493,10 +3494,10 @@ Repeat
 	Else 
 		Flip 1
 	EndIf
-	if mswait < MilliSecs() Then
-		DebugLog "Cycle completed in "+Str(MilliSecs()-mstick)+" ms"
-		mswait = MilliSecs()+1000
-	EndIf
+	;if mswait < MilliSecs() Then
+	;	DebugLog "Cycle completed in "+Str(MilliSecs()-mstick)+" ms"
+	;	mswait = MilliSecs()+1000
+	;EndIf
 Forever
 
 ;----------------------------------------------------------------------------------------------------------------------------------------------------

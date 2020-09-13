@@ -5014,76 +5014,7 @@ Function UpdateNPCs()
 					n\DropSpeed# = 0
 				Else
 					If ShouldEntitiesFall
-;						If n\FallingPickDistance>0
-;							Local pick = LinePick(EntityX(n\Collider),EntityY(n\Collider),EntityZ(n\Collider),0,-n\FallingPickDistance,0)
-;							If pick
-;								n\DropSpeed# = Max(n\DropSpeed - 0.005*FPSfactor*n\GravityMult,-n\MaxGravity)
-;							Else
-;								n\DropSpeed# = 0
-;							EndIf
-;						Else
-;							n\DropSpeed# = Max(n\DropSpeed - 0.005*FPSfactor*n\GravityMult,-n\MaxGravity)
-;						EndIf
-						Local UpdateGravity% = False
-						Local MaxX#,MinX#,MaxZ#,MinZ#
-						If n\InFacility=1
-							If PlayerRoom\RoomTemplate\Name$ <> "173"
-								For e.Events = Each Events
-									If e\EventName = "room860"
-										If e\EventState = 1.0
-											UpdateGravity = True
-											Exit
-										EndIf
-									EndIf
-								Next
-							Else
-								UpdateGravity = True
-							EndIf
-							If (Not UpdateGravity)
-								For r.Rooms = Each Rooms
-									If r\MaxX<>0 Or r\MinX<>0 Or r\MaxZ<>0 Or r\MinZ<>0
-										MaxX# = r\MaxX
-										MinX# = r\MinX
-										MaxZ# = r\MaxZ
-										MinZ# = r\MinZ
-									Else
-										MaxX# = 4.0
-										MinX# = 0.0
-										MaxZ# = 4.0
-										MinZ# = 0.0
-									EndIf
-									If Abs(EntityX(n\Collider)-EntityX(r\obj))<=Abs(MaxX-MinX)
-										If Abs(EntityZ(n\Collider)-EntityZ(r\obj))<=Abs(MaxZ-MinZ)
-											If r=PlayerRoom
-												UpdateGravity = True
-												Exit
-											EndIf
-											If IsRoomAdjacent(PlayerRoom,r)
-												UpdateGravity = True
-												Exit
-											EndIf
-											For i=0 To 3
-												If (IsRoomAdjacent(PlayerRoom\Adjacent[i],r))
-													UpdateGravity = True
-													Exit
-												EndIf
-											Next
-										EndIf
-									EndIf
-								Next
-							EndIf
-						Else
-							UpdateGravity = True
-						EndIf
-						If UpdateGravity
-							n\DropSpeed# = Max(n\DropSpeed - 0.005*FPSfactor*n\GravityMult,-n\MaxGravity)
-						Else
-							If n\FallingPickDistance>0
-								n\DropSpeed = 0.0
-							Else
-								n\DropSpeed# = Max(n\DropSpeed - 0.005*FPSfactor*n\GravityMult,-n\MaxGravity)
-							EndIf
-						EndIf
+						n\DropSpeed# = Max(n\DropSpeed - 0.005*FPSfactor*n\GravityMult,-n\MaxGravity)
 					Else
 						n\DropSpeed# = 0.0
 					EndIf
