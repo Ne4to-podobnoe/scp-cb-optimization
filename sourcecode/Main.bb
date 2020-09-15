@@ -2442,6 +2442,7 @@ Type Events
 	Field img%
 	Field EventConst
 End Type
+Global room860event.Events
 ; Const e_EVENTNAME = ID (if you want to add new event)
 Const e_173 = 0
 Const e_alarm = 1
@@ -2545,6 +2546,7 @@ Function CreateEvent.Events(eventname$, roomname$, id%, prob# = 0.0)
 					e\EventName = eventname					
 					e\room = r
 					e\EventConst = FindEventConst(eventname)
+					SetEventVar(e)
 					Return e
 				End If
 			EndIf
@@ -2559,15 +2561,23 @@ Function CreateEvent.Events(eventname$, roomname$, id%, prob# = 0.0)
 				
 				If Rnd(0.0, 1.0) < prob And temp = False Then
 					e.Events = New Events
-					e\EventName = eventname					
+					e\EventName = eventname
 					e\room = r
 					e\EventConst = FindEventConst(eventname)
+					SetEventVar(e)
 				End If
 			EndIf
 		Next		
 	EndIf
 	
 	Return Null
+End Function
+Function SetEventVar(e.Events)
+	Select e\EventName
+		Case "room860"
+			room860event = e
+			Return e_room860
+	End Select
 End Function
 Function FindEventConst(eventname$)
 	;-example
@@ -3053,16 +3063,12 @@ Repeat
 				If PlayerRoom\RoomTemplate\Name = "173" Then 
 					PlayerZone = 4
 				ElseIf PlayerRoom\RoomTemplate\Name = "room860"
-					For e.Events = Each Events
-						If e\EventName = "room860"
-							If e\EventState = 1.0
-								PlayerZone = 5
-								PositionEntity (SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
-							EndIf
-							
-							Exit
+					If room860event\EventName = "room860"
+						If room860event\EventState = 1.0
+							PlayerZone = 5
+							PositionEntity (SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
 						EndIf
-					Next
+					EndIf
 				EndIf
 				
 				CurrAmbientSFX = Rand(0,AmbientSFXAmount(PlayerZone)-1)
@@ -11915,24 +11921,10 @@ Function PlayAnnouncement(file$) ;This function streams the announcement current
 End Function
 
 Function UpdateStreamSounds()
-	Local e.Events
-	
 	If FPSfactor > 0 Then
 		If IntercomStreamCHN <> 0 Then
 			SetStreamVolume_Strict(IntercomStreamCHN,SFXVolume)
 		EndIf
-		For e = Each Events
-			If e\SoundCHN<>0 Then
-				If e\SoundCHN_isStream
-					SetStreamVolume_Strict(e\SoundCHN,SFXVolume)
-				EndIf
-			EndIf
-			If e\SoundCHN2<>0 Then
-				If e\SoundCHN2_isStream
-					SetStreamVolume_Strict(e\SoundCHN2,SFXVolume)
-				EndIf
-			EndIf
-		Next
 	EndIf
 	
 	If (Not PlayerInReachableRoom()) Then
@@ -11940,20 +11932,6 @@ Function UpdateStreamSounds()
 			If IntercomStreamCHN <> 0 Then
 				StopStream_Strict(IntercomStreamCHN)
 				IntercomStreamCHN = 0
-			EndIf
-			If PlayerRoom\RoomTemplate\Name$ <> "dimension1499" Then
-				For e = Each Events
-					If e\SoundCHN<>0 And e\SoundCHN_isStream Then
-						StopStream_Strict(e\SoundCHN)
-						e\SoundCHN = 0
-						e\SoundCHN_isStream = 0
-					EndIf
-					If e\SoundCHN2<>0 And e\SoundCHN2_isStream Then
-						StopStream_Strict(e\SoundCHN2)
-						e\SoundCHN = 0
-						e\SoundCHN_isStream = 0
-					EndIf
-				Next
 			EndIf
 		EndIf
 	EndIf

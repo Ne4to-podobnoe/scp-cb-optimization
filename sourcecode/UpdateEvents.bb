@@ -2,6 +2,8 @@ Function UpdateEvents()
 	CatchErrors("Uncaught (UpdateEvents)")
 	Local dist#, i%, temp%, pvt%, strtemp$, j%, k%
 	
+	Local rRoom = PlayerInReachableRoom(), rRoomName$ = PlayerRoom\RoomTemplate\Name
+	
 	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams
 	
 	Local CurrTrigger$ = ""
@@ -16,6 +18,34 @@ Function UpdateEvents()
 	
 	For e.Events = Each Events
 		; Case EVENT CONST (if you want to add new event)
+		If FPSfactor > 0 Then
+			If e\SoundCHN<>0 Then
+				If e\SoundCHN_isStream
+					SetStreamVolume_Strict(e\SoundCHN,SFXVolume)
+				EndIf
+			EndIf
+			If e\SoundCHN2<>0 Then
+				If e\SoundCHN2_isStream
+					SetStreamVolume_Strict(e\SoundCHN2,SFXVolume)
+				EndIf
+			EndIf
+		EndIf
+		If (Not rRoom) Then
+			If rRoomName <> "exit1" And rRoomName <> "gatea" Then
+				If rRoomName <> "dimension1499" Then
+					If e\SoundCHN<>0 And e\SoundCHN_isStream Then
+						StopStream_Strict(e\SoundCHN)
+						e\SoundCHN = 0
+						e\SoundCHN_isStream = 0
+					EndIf
+					If e\SoundCHN2<>0 And e\SoundCHN2_isStream Then
+						StopStream_Strict(e\SoundCHN2)
+						e\SoundCHN = 0
+						e\SoundCHN_isStream = 0
+					EndIf
+				EndIf
+			EndIf
+		EndIf
 		Select e\EventConst
 			Case e_exit1
 				;[Block]

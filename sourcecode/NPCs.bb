@@ -7225,12 +7225,9 @@ Function PlayerInReachableRoom(canSpawnIn049Chamber%=False)
 	EndIf
 	;Player is in 860's test room and inside the forest, returning false
 	temp = False
-	For e = Each Events
-		If e\EventName$ = "room860" And e\EventState = 1.0 Then
-			temp = True
-			Exit
-		EndIf
-	Next
+	if room860event <> Null Then
+		If room860event\EventState = 1.0 Then temp = True
+	EndIf
 	If RN = "room860" And temp Then
 		Return False
 	EndIf
