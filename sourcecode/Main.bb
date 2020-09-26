@@ -2443,6 +2443,7 @@ Type Events
 	Field EventConst
 End Type
 Global room860event.Events
+Global gateaevent.Events
 ; Const e_EVENTNAME = ID (if you want to add new event)
 Const e_173 = 0
 Const e_alarm = 1
@@ -2577,6 +2578,9 @@ Function SetEventVar(e.Events)
 		Case "room860"
 			room860event = e
 			Return e_room860
+		Case "gatea"
+			gateaevent = e
+			Return e_gatea
 	End Select
 End Function
 Function FindEventConst(eventname$)

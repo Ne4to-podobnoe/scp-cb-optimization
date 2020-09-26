@@ -945,32 +945,22 @@ Function UpdateNPCs()
 					Local spawn106% = True
 					;checking if 106 is allowed to spawn
 					If PlayerRoom\RoomTemplate\Name$ = "dimension1499" Then spawn106% = False
-					For e.Events = Each Events
-						If e\EventName = "room860"
-							If e\EventState = 1
-								spawn106% = False
-							EndIf
-							Exit
-						EndIf
-					Next
+					If room860event\EventState = 1
+						spawn106% = False
+					EndIf
 					If PlayerRoom\RoomTemplate\Name$ = "room049" And EntityY(Collider) <= -2848*RoomScale Then
 						spawn106% = False
 					EndIf
 					;GateA event has been triggered - don't make 106 disapper!
 					;The reason why this is a seperate For loop is because we need to make sure that room860 would not be able to overwrite the "spawn106%" variable
-					For e.events = Each Events
-						If e\EventName = "gatea"
-							If e\EventState <> 0
-								spawn106% = True
-								If PlayerRoom\RoomTemplate\Name$ = "dimension1499" Then
-									n\Idle = True
-								Else
-									n\Idle = False
-								EndIf
-							EndIf
-							Exit
+					If gateaevent\EventState <> 0
+						spawn106% = True
+						If PlayerRoom\RoomTemplate\Name$ = "dimension1499" Then
+							n\Idle = True
+						Else
+							n\Idle = False
 						EndIf
-					Next
+					EndIf
 					If (Not spawn106%) And n\State <= 0 Then
 						n\State = Rand(22000, 27000)
 						PositionEntity n\Collider,0,500,0
